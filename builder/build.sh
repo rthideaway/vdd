@@ -30,7 +30,7 @@ INSTALL_ROOT="$DEV_ROOT"                  # setup drupal in current working dir
 # Variables set through user input
 SITE_ID=""                              # unique identifier used for the domain
 SITE_PATH=""
-SITE_PROFILE="minimal"
+SITE_PROFILE="standard"
 
 # Include the local config file to override any existing settings.
 if [ -f "$DIR/config.sh" ]; then
@@ -39,12 +39,53 @@ fi
 
 # Contribe modules to download and install
 MODULES_CONTRIB=(
-  admin_menu admin_views bean ckeditor coffee ctools date devel entity entitycache
-  entityreference features file_entity fpa globalredirect google_analytics honeypot
-  libraries link mailsystem maillog mandrill masquerade master media metatag
-  module_filter navbar navbar_region pathauto publication_date redirect reroute_email
-  role_delegation role_export seckit simple_pass_reset site_policy strongarm
-  styleguide token views views_bulk_operations warden xmlsitemap
+  admin_menu
+  admin_views
+  bean
+  ckeditor
+  coffee
+  ctools
+  date
+  devel
+  entity
+  entitycache
+  entityreference
+  features
+  file_entity
+  fpa
+  globalredirect
+  google_analytics
+  honeypot
+  jquery_update
+  libraries
+  link
+  mailsystem
+  maillog
+  mandrill
+  masquerade
+  master
+  media
+  memcache
+  metatag
+  module_filter
+  navbar
+  navbar_region
+  pathauto
+  publication_date
+  redirect
+  reroute_email
+  role_delegation
+  role_export
+  seckit
+  simple_pass_reset
+  site_policy
+  strongarm
+  styleguide
+  token
+  views
+  views_bulk_operations
+  warden
+  xmlsitemap
 )
 
 MODULES_THEME=(
