@@ -121,6 +121,7 @@
     "recipe[vdd::bash]",
     "recipe[memcached]",
     "recipe[vdd::pimpmylogs]",
+    "recipe[vdd::phpmongodb]",
     "recipe[imagemagick]",
     "recipe[phantomjs]",
     "recipe[vdd::phantomjs]",
