@@ -41,6 +41,12 @@ template "/etc/php5/mods-available/xdebug-cli.ini" do
   notifies :restart, "service[php5-fpm]", :delayed
 end
 
+phptypes = [
+  "apache2",
+  "cli",
+  "fpm"
+]
+
 modules = [
   "vdd_php",
   "uploadprogress",
@@ -73,18 +79,34 @@ link '/etc/php5/cli/conf.d/20-xdebug.ini' do
   to '/etc/php5/mods-available/xdebug-cli.ini'
 end
 
+# Delete old vdd_xdebug php config file.
+
 file '/etc/php5/mods-available/vdd_xdebug.ini' do
   action :delete
 end
 
-file '/etc/php5/fpm/20-vdd_xdebug.ini' do
+phptypes.each do |phptype|
+    file '/etc/php5/#{phptype}/conf.d/20-vdd_xdebug.ini' do
+      action :delete
+    end
+
+    link '/etc/php5/#{phptype}/conf.d/20-vdd_xdebug.ini' do
+      action :delete
+    end
+end
+
+# Delete old apc config file
+
+file '/etc/php5/mods-available/vdd_apc.ini' do
   action :delete
 end
 
-file '/etc/php5/fpm/20-vdd_xdebug.ini' do
-  action :delete
-end
+phptypes.each do |phptype|
+    file '/etc/php5/#{phptype}/conf.d/20-vdd_apc.ini' do
+      action :delete
+    end
 
-file '/etc/php5/apache2/conf.d/vdd_apc.ini' do
-  action :delete
+    link '/etc/php5/#{phptype}/conf.d/20-vdd_apc.ini' do
+      action :delete
+    end
 end
