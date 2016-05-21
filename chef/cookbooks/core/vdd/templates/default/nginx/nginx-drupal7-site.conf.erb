@@ -142,6 +142,11 @@ server {
                 try_files $uri @rewrite;
         }
 
+        # Deeson project documentation directory is a static assets directory.
+        location ~ ^/docs/ {
+                autoindex on;
+        }
+
         # All private files need to be handled by Drupal.
         location ~ ^<%= @drupal_sub_folder %>/system/files/.* {
             try_files $uri @rewrite;
