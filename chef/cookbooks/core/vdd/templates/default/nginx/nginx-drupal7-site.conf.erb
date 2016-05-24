@@ -132,9 +132,19 @@ server {
                 fastcgi_read_timeout 3600s;
         }
 
-        # Image styles.
+        # Public files.
         location ~ ^<%= @drupal_sub_folder %>/sites/.*/files/styles/ {
                 try_files $uri @rewrite;
+         }
+
+        # Public files with language prefix.
+        location ~ ^<%= @drupal_sub_folder %>/[^/]*/sites/.*/files/styles/ {
+                try_files $uri @rewrite;
+        }
+
+        # Deeson project documentation directory is a static assets directory.
+        location ~ ^/docs/ {
+                autoindex on;
         }
 
         # All private files need to be handled by Drupal.
@@ -150,5 +160,9 @@ server {
 
         location ~* \.(ttf|ttc|otf|eot|woff|font.css|css)$ {
                 add_header Access-Control-Allow-Origin *;
+        }
+
+        location ~* \.map$ {
+                expires 0;
         }
 }

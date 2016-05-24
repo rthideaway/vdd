@@ -5,6 +5,10 @@ set -e
 
 # Include local config file.
 DIR="`pwd`"
+if [[ $DIR != *"builder"* ]]
+then
+  DIR="$DIR/builder"
+fi
 
 # Development station
 DEV_ROOT="$HOME/Sites"                  # root directory where drupal projects are stored
@@ -26,7 +30,7 @@ INSTALL_ROOT="$DEV_ROOT"                  # setup drupal in current working dir
 # Variables set through user input
 SITE_ID=""                              # unique identifier used for the domain
 SITE_PATH=""
-SITE_PROFILE="minimal"
+SITE_PROFILE="standard"
 
 # Include the local config file to override any existing settings.
 if [ -f "$DIR/config.sh" ]; then
@@ -35,12 +39,53 @@ fi
 
 # Contribe modules to download and install
 MODULES_CONTRIB=(
-  admin_views bean ckeditor coffee ctools date devel entity entitycache entityreference
-  features fpa globalredirect google_analytics honeypot libraries link mailsystem
-  maillog mandrill masquerade master-7.x-2.0-beta3 media metatag module_filter navbar
-  navbar_region pathauto publication_date redirect reroute_email role_delegation
-  role_export seckit simple_pass_reset site_policy strongarm styleguide token
-  views warden xmlsitemap
+  admin_menu
+  admin_views
+  bean
+  ckeditor
+  coffee
+  ctools
+  date
+  devel
+  entity
+  entitycache
+  entityreference
+  features
+  file_entity
+  fpa
+  globalredirect
+  google_analytics
+  honeypot
+  jquery_update
+  libraries
+  link
+  mailsystem
+  maillog
+  mandrill
+  masquerade
+  master
+  media
+  memcache
+  metatag
+  module_filter
+  navbar
+  navbar_region
+  pathauto
+  publication_date
+  redirect
+  reroute_email
+  role_delegation
+  role_export
+  seckit
+  simple_pass_reset
+  site_policy
+  strongarm
+  styleguide
+  token
+  views
+  views_bulk_operations
+  warden
+  xmlsitemap
 )
 
 MODULES_THEME=(
@@ -95,7 +140,6 @@ You could try running './build.sh -i $SITE_ID' to run the site installation.";
   fi
 
   siteInstall
-  createMasterFile
 }
 
 # Set the site paths
@@ -107,6 +151,7 @@ setSitePath() {
     read SITE_ID
   fi
 
+  # @todo check for SITE_ID ending in .dev and error/ strip it off
   SITE_PATH="${INSTALL_ROOT}/${SITE_ID}.dev"
   SITE_DOCROOT="$SITE_PATH/docroot"
   DRUSH_ALIAS_DIR="$SITE_DOCROOT/sites/all/drush"
@@ -119,7 +164,7 @@ siteInstall() {
   cd $SITE_PATH
 
   doing "Downloading Drupal..."
-  drush dl drupal --drupal-project-rename=docroot -y
+  drush dl drupal-7 --drupal-project-rename=docroot -y
 
   doing "Installing Drupal..."
   cd "$SITE_DOCROOT"
@@ -128,10 +173,7 @@ siteInstall() {
   createDrushAliases
 
   # Create the settings file.
-  createSettingsFile
-
-  # Create the master module conf file.
-  createMasterFile
+  createSettingsFiles
 
   doing "Drupal base is ready for VDD provisioning.... add the site '${SITE_ID}' to the config file with the following and run 'vagrant provision':
 
@@ -169,14 +211,14 @@ installDrupal() {
 
   cd "$SITE_DOCROOT"
 
-  drush @vdd si -y ${SITE_PROFILE} --account-name=${USER} --site-name=${SITE_ID} --account-pass=${PASS} --account-mail=${MAIL} --site-mail=${MAIL}
+  drush @vdd si -y ${SITE_PROFILE} --account-name=${USER} --site-name=${SITE_ID} --account-pass=${PASS} --account-mail=${MAIL} --site-mail=${MAIL} --sites-subdir=default
 
   # Download & enable desired modules
-  downloadModules ${MODULES_CONTRIB[@]} ${MODULES_THEME[@]}
+  downloadModules ${MODULES_CONTRIB[@]}
 
-  # Move the themes the theme directory
+  # Download the themes to the theme directory
   for theme in ${MODULES_THEME[@]}; do
-    mv sites/all/modules/contrib/$theme sites/all/themes/
+    drush @vdd dl -y --destination=sites/all/themes $theme
   done
 
   drush @vdd en -y master
@@ -202,191 +244,38 @@ downloadModules() {
 # Create an alias file for the current drupal build
 createDrushAliases() {
   mkdir -p $DRUSH_ALIAS_DIR
+  cp $DIR/includes/drush/drushrc.php ${DRUSH_ALIAS_DIR}/drushrc.php
 
-  cat > ${DRUSH_ALIAS_DIR}/drushrc.php << EOF
-<?php
-
-/**
- * @file
- * drush commands.
- */
-
-\$command_specific['dl'] = array('destination' => 'sites/all/modules/contrib');
-\$command_specific['fe'] = array('destination' => 'sites/all/modules/custom');
-
-//ini_set('memory_limit', '512M');
-EOF
-
-  cat > ${DRUSH_ALIAS_DIR}/${SITE_ID}.aliases.drushrc.php << EOF
-<?php
-
-/**
- * @file
- * Aliases for different environments.
- */
-
-\$aliases['vdd'] = array(
-  'parent' => '@parent',
-  'site' => '${SITE_ID}',
-  'env' => 'vdd',
-  'uri' => '${SITE_ID}.dev',
-  'root' => '/var/www/vhosts/${SITE_ID}.dev/docroot',
-);
-
-if (!file_exists('/var/www/vhosts/${SITE_ID}.dev/docroot')) {
-  \$aliases['vdd']['remote-host'] = 'dev.local';
-  \$aliases['vdd']['remote-user'] = 'vagrant';
-}
-EOF
+  cp $DIR/includes/drush/aliases.drushrc.php ${DRUSH_ALIAS_DIR}/sites.aliases.drushrc.php
+  searchReplace ${DRUSH_ALIAS_DIR}/sites.aliases.drushrc.php
 }
 
-# Creates the master module file.
-createMasterFile() {
-  cat > $SITE_DOCROOT/sites/conf/master.inc << EOF
-<?php
+# Creates the settings files.
+createSettingsFiles() {
+  CONF_DIR=$SITE_DOCROOT/sites/all/conf
+  mkdir $CONF_DIR
 
-/**
- * @file
- * Master module settings.
- */
+  files=($DIR/includes/conf/*)
+  for filepath in ${files[*]}
+  do
+    #dir=`dirname $filepath`
+    file=`basename $filepath`
+    cp $filepath $CONF_DIR/$file
+    searchReplace $CONF_DIR/$file
+  done
 
-\$conf['master_version'] = 2;
-
-\$conf['master_modules']['dev'] = array(
-  'field_ui',
-  'views_ui',
-  //'context_ui',
-  'dblog',
-  'devel',
-  'update',
-  //'stage_file_proxy',
-  //'coder',
-  //'coder_review',
-  'styleguide',
-);
-
-\$conf['master_modules']['test'] = array(
-  'syslog',
-  //'purge',
-  //'expire',
-  //'stage_file_proxy',
-);
-
-\$conf['master_modules']['prod'] = array(
-  'syslog',
-  //'purge',
-  //'expire',
-);
-
-\$conf['master_modules']['base'] = array(
-  'admin_views',
-  'bean',
-  'ckeditor',
-  'coffee',
-  'ctools',
-  'date',
-  'devel',
-  'entity',
-  'entitycache',
-  'entityreference',
-  'features',
-  'fpa',
-  'globalredirect',
-  'google_analytics',
-  'honeypot',
-  'libraries',
-  'link',
-  'mailsystem',
-  'mandrill',
-  'maillog',
-  'masquerade',
-  'master-7.x-2.0-beta3',
-  'media',
-  'metatag',
-  'module_filter',
-  'navbar',
-  'navbar_region',
-  'pathauto',
-  'publication_date',
-  'redirect',
-  'reroute_email',
-  'role_delegation',
-  'role_export',
-  'seckit',
-  'simple_pass_reset',
-  'site_policy',
-  'strongarm',
-  'styleguide',
-  'token',
-  'views',
-  'warden',
-  'xmlsitemap',
-);
-
-EOF
-}
-
-# Creates the settings file.
-createSettingsFile() {
-  mkdir $SITE_DOCROOT/sites/conf
-
-  cat > $SITE_DOCROOT/sites/conf/settings.inc << EOF
-<?php
-
-/**
- * @file for shared configuration between environments.
- */
-
-\$update_free_access = FALSE;
-\$drupal_hash_salt = '';
-
-ini_set('session.gc_probability', 1);
-ini_set('session.gc_divisor', 100);
-ini_set('session.gc_maxlifetime', 200000);
-ini_set('session.cookie_lifetime', 2000000);
-
-\$conf['404_fast_paths_exclude'] = '/\/(?:styles)\//';
-\$conf['404_fast_paths'] = '/\.(?:txt|png|gif|jpe?g|css|js|ico|swf|flv|cgi|bat|pl|dll|exe|asp)$/i';
-\$conf['404_fast_html'] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>404 Not Found</title></head><body><h1>Not Found</h1><p>The requested URL "@path" was not found on this server.</p></body></html>';
-
-drupal_fast_404();
-
-// Never run poormanscron.
-\$conf['cron_safe_threshold'] = '0';
-
-// Regional settings.
-\$conf['site_default_country'] = 'GB';
-\$conf['date_first_day'] = '1';
-\$conf['date_default_timezone'] = 'Europe/London';
-\$conf['configurable_timezones'] = '0';
-
-// File system.
-\$conf['file_public_path'] = 'sites/default/files';
-EOF
-
-  mkdir $SITE_DOCROOT/sites/${SITE_ID}.dev
-  cat > $SITE_DOCROOT/sites/${SITE_ID}.dev/settings.php << EOF
-<?php
-
-/**
- * @file
- * Drupal site-specific configuration file.
- */
-
-require_once 'sites/conf/settings.inc';
-require_once 'sites/conf/master.inc';
-
-if (file_exists('/var/www/settings/${SITE_ID}/settings.inc')) {
-  require '/var/www/settings/${SITE_ID}/settings.inc';
-}
-
-\$conf['master_current_scope'] = 'dev';
-EOF
+  cp $DIR/includes/settings.php $SITE_DOCROOT/sites/default/settings.php
+  searchReplace $SITE_DOCROOT/sites/default/settings.php
 }
 
 # Streamline echoing status
 doing() {
   echo -e "\n$1"
+}
+
+# Search replace a file to set the SITE_ID
+searchReplace() {
+  sed -i '' "s/SITE_ID/${SITE_ID}/g" $1
 }
 
 # Help info
@@ -411,10 +300,14 @@ EOF
 }
 
 # Check command flags invoked and store possible argumets
-while getopts ":mih" opt; do
+while getopts ":msih" opt; do
   case $opt in
     m) #build a site
       make $2
+      ;;
+    s) #create settings a drupal site
+      setSitePath $2
+      createSettingsFiles
       ;;
     i) #install a drupal site
       installDrupal $2

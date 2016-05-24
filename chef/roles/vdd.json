@@ -56,7 +56,8 @@
       "version": "4.0"
     },
     "nginx": {
-      "client_max_body_size": "100m"
+      "client_max_body_size": "100m",
+      "error_log_options" : "info"
     },
     "mongodb": {
       "config": {
@@ -120,6 +121,7 @@
     "recipe[vdd::bash]",
     "recipe[memcached]",
     "recipe[vdd::pimpmylogs]",
+    "recipe[vdd::phpmongodb]",
     "recipe[imagemagick]",
     "recipe[phantomjs]",
     "recipe[vdd::phantomjs]",

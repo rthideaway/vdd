@@ -1,6 +1,6 @@
 <!DOCTYPE html>
   <head>
-    <title>Vagrant Drupal Development</title>
+    <title>Deeson Local Development</title>
     <meta charset="utf-8">
     <style type="text/css">
       .code {
@@ -16,14 +16,14 @@
   </head>
 
   <body>
-    <h1>Welcome to VDD!</h1>
+    <h1>Deeson Local Development environment</h1>
 
-    <p>Hello, developer! On this page you can find links to your configured sites and development tools. Also there is a list of frequently asked questions.</p>
+    <p>Hello, developer! On this page you can find links to your configured sites and development tools.</p>
 
     <ul>
       <li><a href="#dev">Development tools</a></li>
+      <li><a href="#faq">Instructions</a></li>
       <li><a href="#sites">Configured Sites</a></li>
-      <li><a href="#faq">FAQ</a></li>
     </ul>
 
     <h2 id="dev">Development Tools</h2>
@@ -32,21 +32,113 @@
       <li><a href="http://192.168.44.44:8082/phpmyadmin/">phpMyAdmin</a></li>
       <li><a href="/phpinfo.php">phpinfo()</a></li>
       <li><a href="http://logs.dev">Real time logs</a></li>
+      <li><a href="http://phpmongodb.dev">MongoDB UI</a></li>
       <li><a href="/webgrind">Webgrind</a></li>
       <li><a href="http://xhprof.dev">XHProf</a></li>
+      <li><a href="http://192.168.44.44:8984/solr">Solr Administration</a></li>
     </ul>
 
-        <h2 id="ports">Ports and sockets</h2>
-        <ul>
-          <li><b>Port 443</b>: NGinX (HTTPS)</li>
-          <li><b>Port 80</b>: Varnish</li>
-          <li><b>Port 8081</b>: NGinX (HTTP)</li>
-          <li><b>Port 8082</b>: Apache (HTTP)</li>
-          <li><b>Port 8984</b>: Solr</li>
-          <li><b>Port 4444</b>: PhantomJS</li>
-          <li><b>/var/run/php5-fpm.sock</b>: PHP5 FPM</li>
-        </ul>
+    <h2 id="ports">Ports and sockets</h2>
+    <ul>
+      <li><b>Port 443</b>: NGinX (HTTPS)</li>
+      <li><b>Port 80</b>: Varnish</li>
+      <li><b>Port 8081</b>: NGinX (HTTP)</li>
+      <li><b>Port 8082</b>: Apache (HTTP)</li>
+      <li><b>Port 8984</b>: Solr</li>
+      <li><b>Port 4444</b>: PhantomJS</li>
+      <li><b>Port 27017</b>: MongoDB</li>
+      <li><b>/var/run/php5-fpm.sock</b>: PHP5 FPM</li>
+    </ul>
 
+    <h3 id="faq">Instructions</h3>
+    <ul>
+      <li><a href="#ssh">How to ssh into virtual machine?</a></li>
+      <li><a href="#builder">How to install fresh Drupal version?</a></li>
+      <li><a href="#webgrind">What is Webgrind and how would I use it?</a></li>
+      <li><a href="#memcache">Memcache</a></li>
+      <li><a href="#redis">Redis</a></li>
+      <li><a href="#mongodb">MongoDB</a></li>
+      <li><a href="#varnish">How to use SSL and varnish</a></li>
+      <li><a href="#xhprof">XHProf - PHP performance profiling tool</a></li>
+      <li><a href="#xdebugcli">XDebug CLI - How to debug command line scripts</a></li>
+    </ul>
+
+    <h3>Answers</h3>
+
+    <h4 id="ssh">How to ssh into virtual machine?</h4>
+    <p>Open your terminal (e.g. iTerm2 or Powershell) application and change to the directory with your VDD copy. Then simply execute next command:</p>
+    <ol class="code">
+      <li>$ vagrant ssh</li>
+    </ol>
+
+    <h4 id="builder">How to install a fresh Drupal version?</h4>
+    <p>Assuming you have installed to ~/Applications/vdd and your sites are located at ~/Sites then run the following command locally (not in VDD):</p>
+    <ol class="code">
+      <li>$ ~/Applications/vdd/builder/build.sh -m [SHORT_NAME]</li>
+    </ol>
+    <p>e.g. ~/Applications/vdd/builder/build.sh -m  deeson</p>
+    <p>** NOTE: the shortname is without the '.dev' on the end.</p>
+    <p>This will create a new directory for the drupal installation in:</p>
+    <ol class="code">
+      <li>/Users/[USERNAME]/Sites/deeson.dev</li>
+    </ol>
+
+    <h4 id="webgrind">Webgrind</h4>
+    <p>Webgrind is a Xdebug Profiling Web Frontend in PHP. Xdebug can help <a href="http://devzone.zend.com/1120/introducing-xdebug/">simplify debugging</a>.</p>
+    <ul>
+      <li>Enable Xdebug by including "?XDEBUG_PROFILE=1" in the url. For example: <i>http://drupal8.dev/admin/reports/status?XDEBUG_PROFILE=1</i>.</li>
+      <li>After generating Xdebug data, visit the <a href="/webgrind">Webgrind</a> dashboard to inspect results.</li>
+    </ul>
+
+    <h4 id="memcache">Memcache</h4>
+    <p>Memcache is automatically enabled and configured if you have the memcache module in sites/all/contrib/memcache as long as you have required the vdd settings file correctly.</p>
+
+    <h4 id="redis">Redis</h4>
+    <p><b>@todo</b> Redis is automatically enabled and configured if you have the redis module in sites/all/contrib/redis</p>
+
+    <h4 id="mongodb">MongoDB</h4>
+    <p>Mongo DB is provided on port 27017. There is a web based UI for mongodb available at <a href="http://phpmongodb.dev/">here</a>. The username and password are both <b>admin</b></p>
+
+     <h4 id="varnish">How to use Varnish and SSL</h4>
+     <p>If you have required the settings file correctly then nothing else is needed. Your site should respond on https://[shortname].dev (nginx and varnish) and http://[shortname].dev:8081 (no varnish or ssl).
+     </p>
+     <p>You can also add the SSL certificates to your Mac’s keychain to make it trust the certificate and you get a nice green padlock.  There is a certificate per site:
+     </p>
+     <ol>
+     <li>Open finder and open the directory ~/Applications/vdd/data/ssl</li>
+     <li>Double click each crt file, your Mac keychain will open</li>
+     <li>Click Always trust</li>
+     <li>Type your password into the popup and click Update settings</li>
+     </ol>
+
+     <h4 id="xhprof">XHProf</h4>
+     <p>XHProf is a profilling tool which can help you find out what is causing a slow page load</p>
+     <p>To use, enable the devel module, go to the settings page for the devel module and tick the option <b>Enable profiling of all page views and drush requests.</b></p>
+     <p>Open a slow loading page, once its finished loading you will see a link at the very bottom for <b>XHProf output</b></p>
+     <p>Click this to see the XHProf report for that page</p>
+     <p>The View Callgraph button will show you a visual representation of the page load. Any red boxes are function calls which PHP speant a lot of time in</p>
+
+     <h4 id="#xdebugcli">XDebug - How to debug PHP on the command line</h4>
+     <p>These instructions allow you to set breakpoints in a command line script such as drush command and step through execution in PHPStorm. Most of the configuration is in VDD already.</p>
+     <p>Setup, only need to do this once.</p>
+     <ol>
+       <li>Add the following line to your ~/.ssh/config file under the section dev.local:</li>
+       <li class="code">SendEnv PHP_IDE_CONFIG</li>
+     </ol>
+     <p>Project setup, do this one per project</p>
+     <ol>
+       <li>In PHPStorm you need to map local paths to remote paths. This is done in the Preferences section under the PHPStorm menu item then <i>Languages and frameworks --> PHP --> Servers</i></li>
+       <li>Add a new server and call it the same as your project, e.g. deeson.dev you also set the hostname to this as well</i></li>
+       <li>Tick the box <b>Use path mappings</b> and set the absolute path on the server for the top level director of your project (i.e. for the local path <i>~/Sites/deeson.dev</i> set the absolute path on the server to be <i>/var/www/vhosts/deeson.dev</i></li>
+       <li>If you are wanting to debug a drush command, it makes sense to import drush as an external library on the project and also map the location of drush locally with where it is on the server here too. In vdd, drush version 7 is located at <i>/opt/drush/drush-7</i> and drush 8 is located at <i>/opt/drush/drush-8</i></li>
+     </ol>
+     <p>Debugging a drush command, steps to run each you need to debug</p>
+     <ol>
+       <li>Set a breakpoint in your drupal settings.php file somewhere. Press the telephone button in PHPStorm to listen for connections</i>
+       <li>In the terminal, locally or on the vdd box, you must start a debugging session by setting an environment variable which tells PHPStorm which project is being debugged. Use your project shortcode in place of <i>deeson</i> in the example command below:</li>
+       <li class="code">$ export PHP_IDE_CONFIG="serverName=deeson.dev"</li>
+       <li>Now run a simple drush command and it should break at the breakpoint in the settings file in PHPStorm. e.g. drush @vdd status</li>
+     </ol>
 
     <h2 id="sites">Configured Sites</h2>
 
@@ -82,86 +174,5 @@
       <% end %>
     </ul>
 
-    <h2 id="faq">FAQ</h2>
-
-    <h3>Questions</h3>
-    <ul>
-      <li><a href="#q1">Where can I find help?</a></li>
-      <li><a href="#q2">How to ssh into virtual machine?</a></li>
-      <li><a href="#q3">How to install fresh Drupal 8 version?</a></li>
-      <li><a href="#q4">How to quickly install Drupal 7?</a></li>
-      <li><a href="#q5">What is Webgrind and how would I use it?</a></li>
-      <li><a href="#q6">How to use memcache</a></li>
-      <li><a href="#q7">How to use SSL and varnish</a></li>
-    </ul>
-
-    <h3>Answers</h3>
-
-    <h4 id="q1">Where can I find help?</h4>
-    <p>Please check <a href="https://drupal.org/node/2008758">project documentation</a> on drupal.org. For support, join us on IRC in the <i>#drupal-vdd</i> channel.</p>
-
-    <h4 id="q2">How to ssh into virtual machine?</h4>
-    <p>Open your terminal (e.g. iTerm2 or Powershell) application and change to the directory with your VDD copy. Then simply execute next command:</p>
-    <ol class="code">
-      <li>$ vagrant ssh</li>
-    </ol>
-
-    <h4 id="q3">How to install fresh Drupal 8 version?</h4>
-    <p>For this example we'll setup Drupal 8 on a site declared in the config.json: <em>drupal8 (in the default config.json)</em></p>
-    <ol class="code">
-      <li>Win/Mac/Linux host$ vagrant ssh</li>
-      <li>vagrant guest$ cd ~/sites/drupal8</li>
-      <li>vagrant guest$ git clone --branch 8.x http://git.drupal.org/project/drupal.git .</li>
-      <li>vagrant guest$ drush @drupal8 si standard -y</li>
-    </ol>
-
-    <h4 id="q4">How to quickly install Drupal 7?</h4>
-    <p>Make shure that appropriate site exists in config.json file. Don't forget to run 'vagrant provision' after changing config.json.</p>
-    <ol class="code">
-      <li>Win/Mac/Linux host$ vagrant ssh</li>
-      <li>vagrant guest$ rm -rf ~/sites/drupal7</li>
-      <li>vagrant guest$ cd ~/sites</li>
-      <li>vagrant guest$ drush dl drupal-7 --drupal-project-rename="drupal7"</li>
-      <li>vagrant guest$ drush @drupal7 si standard -y</li>
-    </ol>
-
-    <h4 id="q5">What is Webgrind and how do I use it?</h4>
-    <p>Webgrind is a Xdebug Profiling Web Frontend in PHP. Xdebug can help <a href="http://devzone.zend.com/1120/introducing-xdebug/">simplify debugging</a>.</p>
-    <ul>
-      <li>Enable Xdebug by including "?XDEBUG_PROFILE=1" in the url. For example: <i>http://drupal8.dev/admin/reports/status?XDEBUG_PROFILE=1</i>.</li>
-      <li>After generating Xdebug data, visit the <a href="/webgrind">Webgrind</a> dashboard to inspect results.</li>
-    </ul>
-
-    <h4 id="q6">How to use memcache?</h4>
-    <p>You can use memcache as a cache backend in your drupal sites by downloading the memcache module into you sites/all/modules/contrib directory then adding the following tio you sites/[shortcode].dev/settings.php file</p>
-    <ol class="code">
-       <li>$conf['cache_backends'][] = './sites/all/modules/contrib/memcache/memcache.inc';</li>
-       <li>$conf['cache_default_class'] = 'MemCacheDrupal';</li>
-       <li>$conf['cache_class_form'] = 'DrupalDatabaseCache';</li>
-       <li>$conf['cache_class_cache_form'] = 'DrupalDatabaseCache';</li>
-       <li>$conf['lock_inc'] = 'sites/all/modules/contrib/memcache/memcache-lock.inc';</li>
-       <li>$conf['memcache_stampede_protection'] = TRUE;</li>
-       <li>$conf['memcache_servers'] = array('127.0.0.1:11211' => 'default');</li>
-       <li>$conf['memcache_key_prefix'] = '[shortname]';</li>
-     </ol>
-
-     <h4 id="q7">How to use Varnish and SSL</h4>
-     <p>If you have required the settings file correctly then nothing else is needed. Your site should respond on https://[shortname].dev (nginx and varnish) and http://[shortname].dev:8081 (no varnish or ssl).
-     </p>
-     <p>You can also add the SSL certificates to your Mac’s keychain to make it trust the certificate and you get a nice green padlock.  There is a certificate per site:
-     </p>
-     <ol>
-     <li>Open finder and open the directory ~/Applications/vdd/data/ssl</li>
-     <li>Double click each crt file, your Mac keychain will open</li>
-     <li>Click Always trust</li>
-     <li>Type your password into the popup and click Update settings</li>
-     </ol>
-
-          <h4 id="q7">How to use XHProf</h4>
-          <p>XHProf is a profilling tool which can help you find out what is causing a slow page load</p>
-          <p>To use, enable the devel module, go to the settings page for the devel module and tick the option <b>Enable profiling of all page views and drush requests.</b></p>
-          <p>Open a slow loading page, once its finished loading you will see a link at the very bottom for <b>XHProf output</b></p>
-          <p>Click this to see the XHProf report for that page</p>
-          <p>The View Callgraph button will show you a visual representation of the page load. Any red boxes are function calls which PHP speant a lot of time in</p>
   </body>
 </html>

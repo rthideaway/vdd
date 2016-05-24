@@ -34,6 +34,19 @@ template "/etc/php5/mods-available/xdebug.ini" do
   notifies :restart, "service[php5-fpm]", :delayed
 end
 
+template "/etc/php5/mods-available/xdebug-cli.ini" do
+  source "php/xdebug-cli.ini.erb"
+  mode "0644"
+  notifies :restart, "service[apache2]", :delayed
+  notifies :restart, "service[php5-fpm]", :delayed
+end
+
+phptypes = [
+  "apache2",
+  "cli",
+  "fpm"
+]
+
 modules = [
   "vdd_php",
   "uploadprogress",
@@ -43,8 +56,7 @@ modules = [
   "sqlite3",
   "mcrypt",
   "imagick",
-  "xhprof",
-  "xdebug"
+  "xhprof"
 ]
 
 modules.each do |mod|
@@ -57,10 +69,44 @@ modules.each do |mod|
   end
 end
 
+# We want a different xdebug config for cli than for everything else
+# so do this using link rather than php5enmod.
+link '/etc/php5/fpm/conf.d/20-xdebug.ini' do
+  to '/etc/php5/mods-available/xdebug.ini'
+end
+
+link '/etc/php5/cli/conf.d/20-xdebug.ini' do
+  to '/etc/php5/mods-available/xdebug-cli.ini'
+end
+
+# Delete old vdd_xdebug php config file.
+
 file '/etc/php5/mods-available/vdd_xdebug.ini' do
   action :delete
 end
 
-file '/etc/php5/apache2/conf.d/vdd_apc.ini' do
+phptypes.each do |phptype|
+    file '/etc/php5/#{phptype}/conf.d/20-vdd_xdebug.ini' do
+      action :delete
+    end
+
+    link '/etc/php5/#{phptype}/conf.d/20-vdd_xdebug.ini' do
+      action :delete
+    end
+end
+
+# Delete old apc config file
+
+file '/etc/php5/mods-available/vdd_apc.ini' do
   action :delete
+end
+
+phptypes.each do |phptype|
+    file '/etc/php5/#{phptype}/conf.d/20-vdd_apc.ini' do
+      action :delete
+    end
+
+    link '/etc/php5/#{phptype}/conf.d/20-vdd_apc.ini' do
+      action :delete
+    end
 end

@@ -30,6 +30,8 @@ server {
 
         root /var/www/vhosts/<%= @docroot %>;
 
+        index index.php;
+
         # Enable compression, this will help if you have for instance advagg<200e> module
         # by serving Gzip versions of the files.
         gzip_static on;
@@ -63,13 +65,7 @@ server {
         }
 
         location / {
-                # This is cool because no php is touched for static content
-                try_files $uri @rewrite;
-        }
-
-        location @rewrite {
-                # Rewrite all requests to the app_local.php file.
-                rewrite ^ /app_local.php;
+              try_files $uri $uri/ /index.php?$query_string;
         }
 
         location ~ \.php$ {
@@ -77,7 +73,6 @@ server {
                 #NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
                 include fastcgi_params;
                 fastcgi_param SCRIPT_FILENAME $request_filename;
-                fastcgi_param HTTPS on;
                 fastcgi_intercept_errors off;
                 fastcgi_pass unix:/var/run/php5-fpm.sock;
                 fastcgi_buffers 16 1M;
