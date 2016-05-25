@@ -107,7 +107,7 @@ server {
                 rewrite ^ /index.php;
         }
 
-        location ~ \.php$ {
+        location ~ \.php$|^/update.php {
                 fastcgi_split_path_info ^(.+\.php)(/.+)$;
                 #NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
                 include fastcgi_params;
