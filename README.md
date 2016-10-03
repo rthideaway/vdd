@@ -21,7 +21,7 @@ You should have git installed, type git and complete the xcode command line tool
 
 Once xcode is installed, run sudo git as the local admin user to agree to the terms and conditions
 
-You will need a github account with the SSH key installed. 
+You will need a github account with the SSH key installed.
 
 1. Goto https://github.com/join to create an account
 2. Create a local SSH key and install it into your github account by following
@@ -40,7 +40,7 @@ These instructions include setting up a raw D7 site with shortname drupal7.
 1. `cd ~/Applications`
 2. `git clone git@github.com:teamdeeson/vdd.git`
 3. `cd vdd`
-4. Find the latest tag release by using the command git tag then switch to it using the command git checkout 1.0.0 replacing the 1.0.0 with the latest tag (its 1.0.6)
+4. `git checkout develop`
 5. `cp config.example.json config.json`
 6. edit config.json - you should also add your first site configuration now as well. We will include a raw Drupal 7 instance as an example. This project shortname is drupal7. Replace placeholders in the file from [shortname] with drupal7
 7. Setup your DNS so that requests to all domains ending in .dev are sent to the vagrant box by running these commands. After doing this it takes a little while for everything to start resolving. Try flushing DNS cache or just restart your Mac.
@@ -60,7 +60,7 @@ These instructions include setting up a raw D7 site with shortname drupal7.
 11. `vagrant up` this step takes a while to go through as it is downloading the OS image & all needed software packages so go do something else
 12. `vagrant provision` this step also takes a while as all the packages need to be downloaded and configured.
 13. When done, go to [http://192.168.44.44](http://192.168.44.44) to confirm it is working. You should get an HTML page back.
-14. Configure the ssh config to connect to your VDD box. To do this, run the following command within the vdd directory `cd ~/Applications/vdd; vagrant ssh-config`. Make a note of the IdentityFile path. 
+14. Configure the ssh config to connect to your VDD box. To do this, run the following command within the vdd directory `cd ~/Applications/vdd; vagrant ssh-config`. Make a note of the IdentityFile path.
     Edit the file `~/.ssh/config` and add the following to the end. Later, this will allow you to automatically ssh into the virtual box via ssh dev.local
     Replace [IdentityFile] with the path from the vagrant ssh config output.
 
