@@ -49,7 +49,7 @@ phptypes = [
 
 modules = [
   "vdd_php",
-  "uploadprogress",
+#   "uploadprogress",
   "pdo_mysql",
   "mongo",
   "memcache",

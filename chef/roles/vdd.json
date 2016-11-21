@@ -89,7 +89,7 @@
     "recipe[vdd::databases]",
     "recipe[php5-fpm::install]",
     "recipe[vdd::php]",
-    "recipe[vdd::uploadprogress]",
+//    "recipe[vdd::uploadprogress]",
     "recipe[vdd::mailcatcher]",
     "recipe[vdd::phpmyadmin]",
     "recipe[vdd::git]",
