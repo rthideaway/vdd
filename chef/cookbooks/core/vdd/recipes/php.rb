@@ -51,7 +51,7 @@ modules = [
   "vdd_php",
 #   "uploadprogress",
   "pdo_mysql",
-  "mongo",
+#   "mongo",
   "memcache",
   "sqlite3",
   "mcrypt",
