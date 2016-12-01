@@ -58,7 +58,7 @@ when 'debian'
     action node['varnish']['apt']['action']
   end
 
-  %w(apt-transport-https varnish libvarnishapi-dev).each do |p|
+  %w(apt-transport-https varnish).each do |p|
     package p
   end
 end
