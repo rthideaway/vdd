@@ -1,5 +1,0 @@
-# Get the aliases and functions
-# if [ -f ~/.bashrc ]; then
-#   . ~/.bashrc
-# fi
-export PATH=/home/ubuntu/.composer/vendor/bin:$PATH

@@ -1,3 +1,6 @@
 execute 'install_drush' do
-  command "su ubuntu -c 'composer global require drush/drush'"
+  user 'ubuntu'
+  cwd '/home/ubuntu'
+  environment ({'HOME' => '/home/ubuntu', 'USER' => 'ubuntu'})
+  command "composer global require drush/drush"
 end
