@@ -8,9 +8,13 @@ end
 node["vdd"]["sites"].each do |index, site|
   site_type = site["type"] || "drupal7"
 
-  drupal_sub_folder = site["vhost"]["drupal_sub_folder"] || ""
-  if drupal_sub_folder[0..0] != "/" then
-    drupal_sub_folder = "/" + drupal_sub_folder
+  drupal_sub_folder = ""
+
+  if !site["vhost"]["drupal_sub_folder"].nil? then
+    drupal_sub_folder = site["vhost"]["drupal_sub_folder"]
+    if drupal_sub_folder[0..0] != "/" then
+      drupal_sub_folder = "/" + drupal_sub_folder
+    end
   end
 
   directory "/var/www/settings/#{index}" do
