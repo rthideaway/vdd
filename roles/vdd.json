@@ -50,11 +50,6 @@
       "error_log_options" : "info",
       "todo set the port to 80" : ""
     },
-    "mongodb3": {
-      "config": {
-        "dbpath": "/mnt/persistant/mongodb"
-      }
-    },
     "ssl": {
       "certificate_path": "/etc/self-signed-certificates"
     }
