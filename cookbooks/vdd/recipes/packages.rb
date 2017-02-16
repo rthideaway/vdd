@@ -10,7 +10,6 @@ package [
   "mariadb-server-10.0",
   "mariadb-client-10.0",
   "libmysqlclient-dev",
-  "mongodb",
   "nodejs",
   "dnsmasq",
   "git",
