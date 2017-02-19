@@ -1,9 +1,3 @@
-directory "/var/www/pimpmylogs" do
-  mode  00777
-  action :delete
-  recursive true
-end
-
 git "/opt/pimpmylogs" do
     repository "https://github.com/potsky/PimpMyLog"
     revision node["pimpmylogs"]["version"]
@@ -38,21 +32,11 @@ cert = ssl_certificate "ssl_nginx_pimpmylogs" do
   years 10
 end
 
-template "/etc/nginx/sites-enabled/pimpmylogs.conf" do
+template "/etc/nginx/sites-enabled/logs.dev" do
   source "pimpmylogs/nginx.conf.erb"
   variables(
     certificate_path: certificate_path,
   )
-end
-
-web_app "pimpmylogs" do
-  template "pimpmylogs/apache2.conf.erb"
-end
-
-directory "/var/log/apache2" do
-  mode  00777
-  action :create
-  recursive true
 end
 
 directory "/var/log/nginx" do
@@ -61,25 +45,7 @@ directory "/var/log/nginx" do
   recursive true
 end
 
-file '/var/log/php5-fpm.log' do
-  mode '0664'
-  owner 'www-data'
-  group 'www-data'
-end
-
-file '/var/log/php5-apache2.log' do
-  mode '0664'
-  owner 'www-data'
-  group 'www-data'
-end
-
-file '/var/log/apache2/access.log' do
-  mode '0664'
-  owner 'www-data'
-  group 'www-data'
-end
-
-file '/var/log/apache2/error.log' do
+file '/var/log/php7.0-fpm.log' do
   mode '0664'
   owner 'www-data'
   group 'www-data'

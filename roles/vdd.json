@@ -31,7 +31,7 @@
       "jdk_version": "7"
     },
     "pimpmylogs": {
-      "version" : "v1.7.9"
+      "version" : "v1.7.12"
     },
     "solr" : {
       "version": "4.10.3",
@@ -74,7 +74,8 @@
     "recipe[vdd::composer]",
     "recipe[vdd::drush]",
     "recipe[vdd::help]",
-    "recipe[mailhog]"
+    "recipe[mailhog]",
+    "recipe[vdd::pimpmylogs]"
   ],
   "todo": [
     "composer, drush    sites .json files    "

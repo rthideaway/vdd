@@ -102,9 +102,9 @@
 				}
 			}
     },
-		"php5": {
-			"display" : "PHP error log",
-			"path"    : "\/var\/log\/php5-apache2.log",
+		"php7": {
+			"display" : "PHP 7 FPM error log",
+			"path"    : "\/var\/log\/php7.0-fpm.log",
 			"refresh" : 5,
 			"max"     : 10,
 			"notify"  : true,
@@ -128,73 +128,6 @@
 				},
 				"exclude": {
 					"Log": ["\\/PHP Stack trace:\\/", "\\/PHP *[0-9]*\\. \\/"]
-				}
-			}
-		},
-		"apache_access": {
-			"display" : "Apache: Access",
-			"path"    : "\/var\/log\/apache2\/access.log",
-			"refresh" : 0,
-			"max"     : 10,
-			"notify"  : false,
-			"format"  : {
-				"type"         : "NCSA",
-				"regex"        : "|^((\\S*) )*(\\S*) (\\S*) (\\S*) \\[(.*)\\] \"(\\S*) (.*) (\\S*)\" ([0-9]*) (.*)( \"(.*)\" \"(.*)\"( [0-9]*/([0-9]*))*)*$|U",
-				"export_title" : "URL",
-				"match"        : {
-					"Date"    : 6,
-					"IP"      : 3,
-					"CMD"     : 7,
-					"URL"     : 8,
-					"Code"    : 10,
-					"Size"    : 11,
-					"Referer" : 13,
-					"UA"      : 14,
-					"User"    : 5,
-					"\u03bcs" : 16
-				},
-				"types": {
-					"Date"    : "date:H:i:s",
-					"IP"      : "ip:geo",
-					"URL"     : "txt",
-					"Code"    : "badge:http",
-					"Size"    : "numeral:0b",
-					"Referer" : "link",
-					"UA"      : "ua:{os.name} {os.version} | {browser.name} {browser.version}\/100",
-					"\u03bcs" : "numeral:0,0"
-				},
-				"exclude": {
-					"URL": ["\/favicon.ico\/", "\/\\.pml\\.php.*$\/"],
-					"CMD": ["\/OPTIONS\/"]
-				}
-			}
-		},
-		"apache_error": {
-			"display" : "Apache: Error",
-			"path"    : "\/var\/log\/apache2\/error.log",
-			"refresh" : 5,
-			"max"     : 10,
-			"notify"  : true,
-			"format"  : {
-				"type"         : "HTTPD 2.2",
-				"regex"        : "|^\\[(.*)\\] \\[(.*)\\] (\\[client (.*)\\] )*((?!\\[client ).*)(, referer: (.*))*$|U",
-				"export_title" : "Log",
-				"match"        : {
-					"Date"     : 1,
-					"IP"       : 4,
-					"Log"      : 5,
-					"Severity" : 2,
-					"Referer"  : 7
-				},
-				"types": {
-					"Date"     : "date:H:i:s",
-					"IP"       : "ip:http",
-					"Log"      : "preformatted",
-					"Severity" : "badge:severity",
-					"Referer"  : "link"
-				},
-				"exclude": {
-					"Log": ["\/PHP Stack trace:\/", "\/PHP *[0-9]*\\. \/"]
 				}
 			}
 		},
@@ -263,40 +196,12 @@
 					"UA"      : "ua:{os.name} {os.version} | {browser.name} {browser.version}\/100"
 				},
 				"exclude": {
-					"URL": ["\/favicon.ico\/", "\/\\.pml\\.php\\.*$\/"],
-					"CMD": ["\/OPTIONS\/"]
+					"URL": ["\/favicon.ico\/", "\/\\.pml\\.php\\.*$\/", "\/logs.dev\/"],
+          "CMD": ["\/OPTIONS\/"],
+          "REFERER": ["\/.*logs.dev.*\/"]
 				}
 			}
     },
-		"php5fpm": {
-			"display" : "PHP FPM messages",
-			"path"    : "\/var\/log\/php5-fpm.log",
-			"refresh" : 5,
-			"max"     : 10,
-			"notify"  : true,
-			"format"  : {
-				"type"         : "PHP",
-				"regex"        : "@^\\[(.*)-(.*)-(.*) (.*):(.*):(.*)( (.*))*\\] ((PHP (.*):  (.*) in (.*) on line (.*))|(.*))$@U",
-				"export_title" : "Error",
-				"match"        : {
-					"Date"     : [ 2 , " " , 1 , " " , 4 , ":" , 5 , ":" , 6 , " " , 3 ],
-					"Severity" : 11,
-					"Error"    : [ 12 , 15 ],
-					"File"     : 13,
-					"Line"     : 14
-				},
-				"types"    : {
-					"Date"     : "date:H:i:s",
-					"Severity" : "badge:severity",
-					"File"     : "pre:\/-69",
-					"Line"     : "numeral",
-					"Error"    : "pre"
-				},
-				"exclude": {
-					"Log": ["\\/PHP Stack trace:\\/", "\\/PHP *[0-9]*\\. \\/"]
-				}
-			}
-		},
 		"syslog": {
 			"display" : "Syslog",
 			"path"    : "/var/log/syslog",
