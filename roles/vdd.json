@@ -36,7 +36,7 @@
     "solr" : {
       "version": "4.10.3",
       "checksum": "ac7024a0a759c6c53cc3a66b3a84757d599d350f491eb221160613356532e2b6",
-      "port": "8983"
+      "port": "8984"
     },
     "apache" : {
       "listen_ports": [ 8082 ]
