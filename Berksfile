@@ -32,3 +32,4 @@ cookbook "ssl_certificate"
 # cookbook "php5-fpm"
 # cookbook 'imagemagick'
 # cookbook 'phantomjs', '~> 1.0.3'
+cookbook 'mailhog', '~> 0.2.0'

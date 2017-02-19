@@ -69,12 +69,12 @@
     "recipe[vdd::solr]",
     "recipe[vdd::tika]",
     "recipe[vdd::sites]",
-    "recipe[vdd::mailcatcher]",
     "recipe[vdd::git]",
     "recipe[vdd::bash]",
     "recipe[vdd::composer]",
     "recipe[vdd::drush]",
-    "recipe[vdd::help]"
+    "recipe[vdd::help]",
+    "recipe[mailhog]"
   ],
   "todo": [
     "composer, drush    sites .json files    "

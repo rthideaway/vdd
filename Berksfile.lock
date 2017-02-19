@@ -1,6 +1,7 @@
 DEPENDENCIES
   apt
   database
+  mailhog (~> 0.2.0)
   mariadb
   solr
   ssl_certificate
@@ -24,6 +25,8 @@ GRAPH
     apt (>= 0.0.0)
     homebrew (>= 0.0.0)
     windows (>= 0.0.0)
+  mailhog (0.2.0)
+    runit (= 1.7.4)
   mariadb (1.0.1)
     apt (>= 0.0.0)
     yum (>= 0.0.0)
@@ -34,10 +37,13 @@ GRAPH
   ohai (4.2.3)
     compat_resource (>= 12.14.7)
   openssl (6.0.0)
+  packagecloud (0.2.5)
   postgresql (6.0.1)
     build-essential (>= 2.0.0)
     compat_resource (>= 12.16.3)
     openssl (>= 4.0)
+  runit (1.7.4)
+    packagecloud (>= 0.0.0)
   seven_zip (2.0.2)
     windows (>= 1.2.2)
   solr (0.6.0)

@@ -28,13 +28,10 @@
 
     <h2 id="dev">Development Tools</h2>
     <ul>
-      <li><a href="http://<%= node["vm"]["ip"] %>:1080/">MailCatcher</a></li>
-      <li><a href="http://<%= node["vm"]["ip"] %>:8082/phpmyadmin/">phpMyAdmin</a></li>
+      <li><a href="http://<%= node["vm"]["ip"] %>:8025/">MailHog</a></li>
       <li><a href="/phpinfo.php">phpinfo()</a></li>
       <li><a href="http://logs.<%= node["vm"]["domain_suffix"] %>">Real time logs</a></li>
-      <li><a href="http://phpmongodb.<%= node["vm"]["domain_suffix"] %>">MongoDB UI</a></li>
       <li><a href="/webgrind">Webgrind</a></li>
-      <li><a href="http://xhprof.<%= node["vm"]["domain_suffix"] %>">XHProf</a></li>
       <li><a href="http://<%= node["vm"]["ip"] %>:8984/solr">Solr Administration</a></li>
     </ul>
 
