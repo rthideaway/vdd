@@ -30,14 +30,14 @@ end
 
 # Create the settings for xdebug in HTTP.
 template "/etc/php/7.0/mods-available/xdebug_http.ini" do
-  source "php/xdebug.ini.erb"
+  source "php/xdebug_http.ini.erb"
   mode "0644"
   notifies :restart, "service[php7.0-fpm]", :delayed
 end
 
 # Create the settings for xdebug in CLI.
 template "/etc/php/7.0/mods-available/xdebug_cli.ini" do
-  source "php/xdebug-cli.ini.erb"
+  source "php/xdebug_cli.ini.erb"
   mode "0644"
 end
 
