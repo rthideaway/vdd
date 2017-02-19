@@ -28,22 +28,28 @@ execute 'phpenmod' do
   command "phpenmod vdd_php"
 end
 
+# Create the settings for xdebug in HTTP.
 template "/etc/php/7.0/mods-available/xdebug_http.ini" do
   source "php/xdebug.ini.erb"
   mode "0644"
   notifies :restart, "service[php7.0-fpm]", :delayed
 end
 
-execute 'phpenmod' do
-  command "phpenmod xdebug_http -s fpm"
-end
-
+# Create the settings for xdebug in CLI.
 template "/etc/php/7.0/mods-available/xdebug_cli.ini" do
   source "php/xdebug-cli.ini.erb"
   mode "0644"
 end
 
-# Leaving this off as I suspect it breaks things.
-# execute 'phpenmod' do
-#   command "phpenmod xdebug_http -s cli"
-# end
+execute 'configure_xdebug' do
+  # Enable the generic xdebug config (This is just the module file inclusion).
+  command "phpenmod xdebug"
+
+  # Enable HTTP xdebug settings for FPM only.
+  command "phpenmod -s fpm xdebug_http"
+  command "phpdismod -s cli xdebug_http"
+
+  # Enable CLI xdebug settings for CLI only.
+  command "phpenmod -s cli xdebug_cli"
+  command "phpdismod -s fpm xdebug_cli"
+end
