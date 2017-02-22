@@ -48,17 +48,6 @@ $conf['apachesolr_attachments_extract_using'] = 'tika';
 $conf['apachesolr_attachments_tika_path'] = '/opt/apache-tika/';
 $conf['apachesolr_attachments_tika_jar'] = 'tika.jar';
 
-if (file_exists('sites/all/modules/contrib/memcache')) {
-  $conf['cache_backends'][] = './sites/all/modules/contrib/memcache/memcache.inc';
-  $conf['cache_default_class'] = 'MemCacheDrupal';
-  $conf['cache_class_form'] = 'DrupalDatabaseCache';
-  $conf['cache_class_cache_form'] = 'DrupalDatabaseCache';
-  $conf['lock_inc'] = 'sites/all/modules/contrib/memcache/memcache-lock.inc';
-  $conf['memcache_stampede_protection'] = TRUE;
-  $conf['memcache_servers'] = array('127.0.0.1:11211' => 'default');
-  $conf['memcache_key_prefix'] = '<%= @shortcode %>';
-}
-
 // Syslog settings.
 $conf['syslog_identity'] = 'drupal_<%= @shortcode %>_<%= node["vm"]["domain_suffix"] %>';
 $conf['syslog_facility'] = '184';
