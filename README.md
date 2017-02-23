@@ -1,21 +1,14 @@
 Vagrant Drupal Development
 --------------------------
 
-This is a fork of Vagrant Drupal Development (VDD) is fully configured and ready to use
+This is the Deeson fork of Vagrant Drupal Development (VDD) is fully configured and ready to use
 development environment built with VirtualBox, Vagrant, Linux and Chef Solo
 provisioner.
-
-The main goal of the project is to provide easy to use, fully functional, highly
-customizable and extendable Linux based environment for Drupal development.
-
-Full VDD documentation can be found on drupal.org:
-https://drupal.org/node/2008758
-
 
 Getting Started
 ---------------
 
-### VDD Installation
+### VDD Installation (from scratch)
 
 You should have git installed, type git and complete the xcode command line tools instructions if it pops up.
 
@@ -40,7 +33,7 @@ These instructions include setting up a raw D7 site with shortname drupal7.
 1. `cd ~/Applications`
 2. `git clone git@github.com:teamdeeson/vdd.git`
 3. `cd vdd`
-4. `git checkout develop`
+4. `git checkout develop/xenial`
 5. `cp config.example.json config.json`
 6. edit config.json - you should also add your first site configuration now as well. We will include a raw Drupal 7 instance as an example. This project shortname is drupal7. Replace placeholders in the file from [shortname] with drupal7
 7. Setup your DNS so that requests to all domains ending in .dev are sent to the vagrant box by running these commands. After doing this it takes a little while for everything to start resolving. Try flushing DNS cache or just restart your Mac.
@@ -67,7 +60,7 @@ These instructions include setting up a raw D7 site with shortname drupal7.
 
         Host dev.local
           HostName 192.168.44.44
-          User vagrant
+          User ubuntu
           UserKnownHostsFile /dev/null
           StrictHostKeyChecking no
           PasswordAuthentication no
@@ -75,6 +68,29 @@ These instructions include setting up a raw D7 site with shortname drupal7.
           IdentitiesOnly yes
           RequestTTY Yes
           LogLevel QUIET
-          SendEnv PHP_IDE_CONFIG
+
+
+## Xenial update instructions
+
+If you were previously tracking develop and would like to switch to the new Xenial release follow the instructions below.
+
+The Xenial branch is slimmed down from the original for developer ease (no Varnish for example) and runs Ubuntu Xenial OS and PHP 7.0
+
+1. Make sure you are running the latest versions of [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and [Vagrant](https://www.virtualbox.org/wiki/Downloads)
+2. There is a chance you will lose the files on your persistent storage during this process. If you can backup the file at ~/Applications/vdd/persistant-storage.vdi then do this. Otherwise, you can just take some db backups of your active projects so you can restore them after if this happens.
+3. cd ~/Applications/vdd
+4. vagrant destroy
+5. Switch to the new branch:  git fetch && git checkout xenial/develop
+6. Edit your config.json file - compare with the config.json.example file, there is a new line required ("domain\_suffix": "dev") also you can remove ("persist\_db": true). You could also take this opportunity to remove unnecessary lines from the individual site configurations in the file as well (compare with the new example file)
+vagrant up - this will build the new VDD box by downloading a Xenial OS image from ubuntu and installing the more mimimal set of packages.
+7. Once complete you will need to go into the box and change the owner of the mysql files stored in the persistent storage as the UID of the mysql user will have changed:
+vagrant ssh
+8. cd /mnt/persistent/mysql
+9. sudo chown -R mysql.mysql .
+10. sudo service mysql restart
+11. On your Mac, you'll need to make a change your to ssh config file because the user on the Xenial box has changed from vagrant to ubuntu
+    edit ~/.ssh/config
+12. Find the section which starts Host dev.local
+13. Change User vagrant to User ubuntu  (if this is missing then add it)
 
 
