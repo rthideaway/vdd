@@ -41,15 +41,18 @@ template "/etc/php/7.0/mods-available/xdebug_cli.ini" do
   mode "0644"
 end
 
-execute 'configure_xdebug' do
+execute 'configure_xdebug_general' do
   # Enable the generic xdebug config (This is just the module file inclusion).
   command "phpenmod xdebug"
+end
 
+execute 'configure_xdebug_http_fpm' do
   # Enable HTTP xdebug settings for FPM only.
   command "phpenmod -s fpm xdebug_http"
-  command "phpdismod -s cli xdebug_http"
-
-  # Enable CLI xdebug settings for CLI only.
-  command "phpenmod -s cli xdebug_cli"
-  command "phpdismod -s fpm xdebug_cli"
 end
+
+execute 'configure_xdebug_http_cli' do
+  # Make sure xli doesn't have the http xdebug elements.
+  command "phpdismod -s cli xdebug_http"
+end
+
