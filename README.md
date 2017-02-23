@@ -5,10 +5,12 @@ This is the Deeson fork of Vagrant Drupal Development (VDD) is fully configured 
 development environment built with VirtualBox, Vagrant, Linux and Chef Solo
 provisioner.
 
+We use this on MacOSX - if you use other OS then your mileage may vary.
+
 Getting Started
 ---------------
 
-### VDD Installation (from scratch)
+### VDD Installation (from scratch - update instructions below)
 
 You should have git installed, type git and complete the xcode command line tools instructions if it pops up.
 
@@ -25,8 +27,6 @@ You will also need to have sudo access for your local user. Get a senior dev to 
 [Install Vagrant](http://www.vagrantup.com/downloads.html)
 
 [Install VirtualBox](https://www.virtualbox.org/wiki/Downloads)
-
-### VDD initial configuration
 
 These instructions include setting up a raw D7 site with shortname drupal7.
 
