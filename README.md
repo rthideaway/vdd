@@ -93,4 +93,8 @@ vagrant ssh
 12. Find the section which starts Host dev.local
 13. Change User vagrant to User ubuntu  (if this is missing then add it)
 
+#### Drush aliases
 
+Some of your sites may have hard coded coded the vdd user as `vagrant`. The best thing to do is to remove these lines from the projects drush aliases file.  i.e. in the sites/all/drush/sites.aliases.drushrc.php file remove any lines that look like this:
+
+    $aliases['vdd']['remote-user'] = 'vagrant';
