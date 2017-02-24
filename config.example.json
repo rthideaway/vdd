@@ -12,8 +12,7 @@
         "guest_path": "/var/www/vhosts"
       }
     ],
-    "domain_suffix": "dev",
-    "persist_db": true
+    "domain_suffix": "dev"
   },
   "vdd": {
     "sites": {
