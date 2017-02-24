@@ -31,73 +31,45 @@
       <li><a href="http://<%= node["vm"]["ip"] %>:8025/">MailHog</a></li>
       <li><a href="/phpinfo.php">phpinfo()</a></li>
       <li><a href="http://logs.<%= node["vm"]["domain_suffix"] %>">Real time logs</a></li>
-      <li><a href="/webgrind">Webgrind</a></li>
       <li><a href="http://<%= node["vm"]["ip"] %>:8984/solr">Solr Administration</a></li>
     </ul>
 
-    <h2 id="ports">Ports and sockets</h2>
+    <h2 id="ports">Ports</h2>
     <ul>
       <li><b>Port 443</b>: NGinX (HTTPS)</li>
-      <li><b>Port 80</b>: Varnish</li>
-      <li><b>Port 8081</b>: NGinX (HTTP)</li>
-      <li><b>Port 8082</b>: Apache (HTTP)</li>
+      <li><b>Port 80</b>: NGinX (HTTP)</li>
       <li><b>Port 8984</b>: Solr</li>
-      <li><b>Port 4444</b>: PhantomJS</li>
-      <li><b>Port 27017</b>: MongoDB</li>
-      <li><b>/var/run/php5-fpm.sock</b>: PHP5 FPM</li>
     </ul>
 
     <h3 id="faq">Instructions</h3>
     <ul>
       <li><a href="#ssh">How to ssh into virtual machine?</a></li>
       <li><a href="#builder">How to install fresh Drupal version?</a></li>
-      <li><a href="#webgrind">What is Webgrind and how would I use it?</a></li>
-      <li><a href="#memcache">Memcache</a></li>
-      <li><a href="#redis">Redis</a></li>
-      <li><a href="#mongodb">MongoDB</a></li>
-      <li><a href="#varnish">How to use SSL and varnish</a></li>
-      <li><a href="#xhprof">XHProf - PHP performance profiling tool</a></li>
+      <li><a href="#ssl">How to use SSL</a></li>
       <li><a href="#xdebugcli">XDebug CLI - How to debug command line scripts</a></li>
     </ul>
 
     <h3>Answers</h3>
 
     <h4 id="ssh">How to ssh into virtual machine?</h4>
-    <p>Open your terminal (e.g. iTerm2 or Powershell) application and change to the directory with your VDD copy. Then simply execute next command:</p>
+    <p>There are a couple of methods, either via the vagrant directory:</p>
     <ol class="code">
+      <li>$ cd ~/Applications/vdd</li>
       <li>$ vagrant ssh</li>
     </ol>
 
-    <h4 id="builder">How to install a fresh Drupal version?</h4>
-    <p>Assuming you have installed to ~/Applications/vdd and your sites are located at ~/Sites then run the following command locally (not in VDD):</p>
+    <p>Or you can ssh in anywhere via:</p>
     <ol class="code">
-      <li>$ ~/Applications/vdd/builder/build.sh -m [SHORT_NAME]</li>
-    </ol>
-    <p>e.g. ~/Applications/vdd/builder/build.sh -m  deeson</p>
-    <p>** NOTE: the shortname is without the '.<%= node["vm"]["domain_suffix"] %>' on the end.</p>
-    <p>This will create a new directory for the drupal installation in:</p>
-    <ol class="code">
-      <li>/Users/[USERNAME]/Sites/deeson.<%= node["vm"]["domain_suffix"] %></li>
+      <li>$ ssh dev.local</li>
     </ol>
 
-    <h4 id="webgrind">Webgrind</h4>
-    <p>Webgrind is a Xdebug Profiling Web Frontend in PHP. Xdebug can help <a href="http://devzone.zend.com/1120/introducing-xdebug/">simplify debugging</a>.</p>
-    <ul>
-      <li>Enable Xdebug by including "?XDEBUG_PROFILE=1" in the url. For example: <i>http://drupal8.<%= node["vm"]["domain_suffix"] %>/admin/reports/status?XDEBUG_PROFILE=1</i>.</li>
-      <li>After generating Xdebug data, visit the <a href="/webgrind">Webgrind</a> dashboard to inspect results.</li>
-    </ul>
+    <p>Or from a project docroot you can use drush:</p>
+    <ol class="code">
+      <li>$ drush @vdd ssh</li>
+    </ol>
 
-    <h4 id="memcache">Memcache</h4>
-    <p>Memcache is automatically enabled and configured if you have the memcache module in sites/all/contrib/memcache as long as you have required the vdd settings file correctly.</p>
-
-    <h4 id="redis">Redis</h4>
-    <p><b>@todo</b> Redis is automatically enabled and configured if you have the redis module in sites/all/contrib/redis</p>
-
-    <h4 id="mongodb">MongoDB</h4>
-    <p>Mongo DB is provided on port 27017. There is a web based UI for mongodb available at <a href="http://phpmongodb.<%= node["vm"]["domain_suffix"] %>/">here</a>. The username and password are both <b>admin</b></p>
-
-     <h4 id="varnish">How to use Varnish and SSL</h4>
-     <p>If you have required the settings file correctly then nothing else is needed. Your site should respond on https://[shortname].<%= node["vm"]["domain_suffix"] %> (nginx and varnish) and http://[shortname].<%= node["vm"]["domain_suffix"] %>:8081 (no varnish or ssl).
+     <h4 id="ssl">How to use SSL</h4>
+     <p>If you have required the settings file correctly then nothing else is needed. Your site should respond on https://[shortname].<%= node["vm"]["domain_suffix"] %>
      </p>
      <p>You can also add the SSL certificates to your Mac’s keychain to make it trust the certificate and you get a nice green padlock.  There is a certificate per site:
      </p>
@@ -108,36 +80,19 @@
      <li>Type your password into the popup and click Update settings</li>
      </ol>
 
-     <h4 id="xhprof">XHProf</h4>
-     <p>XHProf is a profilling tool which can help you find out what is causing a slow page load</p>
-     <p>To use, enable the devel module, go to the settings page for the devel module and tick the option <b>Enable profiling of all page views and drush requests.</b></p>
-     <p>Open a slow loading page, once its finished loading you will see a link at the very bottom for <b>XHProf output</b></p>
-     <p>Click this to see the XHProf report for that page</p>
-     <p>The View Callgraph button will show you a visual representation of the page load. Any red boxes are function calls which PHP speant a lot of time in</p>
-
      <h4 id="#xdebugcli">XDebug - How to debug PHP on the command line</h4>
      <p>These instructions allow you to set breakpoints in a command line script such as drush command and step through execution in PHPStorm. Most of the configuration is in VDD already.</p>
-     <p>Setup, only need to do this once.</p>
      <ol>
-       <li>Add the following line to your ~/.ssh/config file under the section dev.local:</li>
-       <li class="code">SendEnv PHP_IDE_CONFIG</li>
-     </ol>
-     <p>Project setup, do this one per project</p>
-     <ol>
-       <li>In PHPStorm you need to map local paths to remote paths. This is done in the Preferences section under the PHPStorm menu item then <i>Languages and frameworks --> PHP --> Servers</i></li>
-       <li>Add a new server and call it the same as your project, e.g. deeson.<%= node["vm"]["domain_suffix"] %> you also set the hostname to this as well</i></li>
-       <li>Tick the box <b>Use path mappings</b> and set the absolute path on the server for the top level director of your project (i.e. for the local path <i>~/Sites/deeson.<%= node["vm"]["domain_suffix"] %></i> set the absolute path on the server to be <i>/var/www/vhosts/deeson.<%= node["vm"]["domain_suffix"] %></i></li>
-       <li>If you are wanting to debug a drush command, it makes sense to import drush as an external library on the project and also map the location of drush locally with where it is on the server here too. In vdd, drush version 7 is located at <i>/opt/drush/drush-7</i> and drush 8 is located at <i>/opt/drush/drush-8</i></li>
-     </ol>
-     <p>Debugging a drush command, steps to run each you need to debug</p>
-     <ol>
-       <li>Set a breakpoint in your drupal settings.php file somewhere. Press the telephone button in PHPStorm to listen for connections</i>
-       <li>In the terminal, locally or on the vdd box, you must start a debugging session by setting an environment variable which tells PHPStorm which project is being debugged. Use your project shortcode in place of <i>deeson</i> in the example command below:</li>
-       <li class="code">$ export PHP_IDE_CONFIG="serverName=deeson.<%= node["vm"]["domain_suffix"] %>"</li>
-       <li>Now run a simple drush command and it should break at the breakpoint in the settings file in PHPStorm. e.g. drush @vdd status</li>
+       <li>Preferences --&gt; Lanuages and Frameworks --&gt; PHP </li>
+       <li>Add a new CLI interpreter (PHP 7) called VDD</li>
+       <li>Remote should be set to <b>Vargrant</b></li>
+       <li>Vagrant instance folder should be your VDD installation path (i.e. ~/Application/vdd)</li>
+       <li>PHP Executable will be <b>/usr/bin/php</b></li>
+       <li>Click OK</li>
+       <li>Path Mappings should include a mapping from your Sites directory <b>~/Sites</b> to <b>/var/www/vhosts</b> on VDD</li>
      </ol>
 
-    <h2 id="sites">Configured Sites</h2>
+     <h2 id="sites">Configured Sites</h2>
 
     <h3>Add the following to host machine's <a href="http://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/" target="_blank">hosts file</a>:</h3>
     <ul class="code">
