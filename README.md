@@ -103,9 +103,9 @@ Some of your sites may have hard coded coded the vdd user as `vagrant`. The best
 
 If you get an error like this:
 
-   The following SSH command responded with a non-zero exit status.
-   Vagrant assumes that this means the command failed!
-   mount -o 'vers=3,udp' 192.168.44.1:'/Users/[User]/Applications/vdd/data' /var/www
+    The following SSH command responded with a non-zero exit status.
+    Vagrant assumes that this means the command failed!
+    mount -o 'vers=3,udp' 192.168.44.1:'/Users/[User]/Applications/vdd/data' /var/www
 
 The peristant storage plugin has gone wonky. You can repair it by executing the following commands:
 
