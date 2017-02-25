@@ -95,9 +95,14 @@ vagrant ssh
 
 #### Drush aliases
 
-Some of your sites may have hard coded coded the vdd user as `vagrant`. The best thing to do is to remove these lines from the projects drush aliases file.  i.e. in the sites/all/drush/sites.aliases.drushrc.php file remove any lines that look like this:
+Some of your sites may have hard coded the vdd user as `vagrant`. The best thing to do is to remove these lines from the projects drush aliases file.  i.e. in the sites/all/drush/sites.aliases.drushrc.php file remove any lines that look like this:
 
     $aliases['vdd']['remote-user'] = 'vagrant';
+
+#### Updating the box
+
+**Question**: I'm seeing a message that says *A newer version of the box 'ubuntu/xenial64' is available!* - can I update the box?
+**Answer**: Yes you can by running `vagrant box update`.
 
 ### Known issues
 
