@@ -10,6 +10,7 @@ pkgs = [
   "php-memcache",
   "php-zip",
   "php-xml",
+  "php-mbstring"
 ]
 
 pkgs.each do |pkg|
