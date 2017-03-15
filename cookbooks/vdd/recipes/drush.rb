@@ -1,6 +1,6 @@
 execute 'install_drush' do
-  user 'ubuntu'
-  cwd '/home/ubuntu'
-  environment ({'HOME' => '/home/ubuntu', 'USER' => 'ubuntu'})
+  user 'vagrant'
+  cwd '/home/vagrant'
+  environment ({'HOME' => '/home/vagrant', 'USER' => 'vagrant'})
   command "composer global require drush/drush"
 end
