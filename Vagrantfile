@@ -2,7 +2,7 @@ Vagrant.configure("2") do |config|
 
   # TODO if the config file doesn't exist - make it, or advise it
   config_json = JSON.parse(File.read("config.json"))
-  config.vm.box = "ubuntu/xenial64"
+  config.vm.box = "bento/ubuntu-16.04"
   config.vm.network :private_network, ip: config_json["vm"]["ip"]
 
   # Apachesolr.
@@ -29,7 +29,6 @@ Vagrant.configure("2") do |config|
   config.persistent_storage.filesystem = 'ext4'
   config.persistent_storage.mountpoint = '/mnt/persistant'
   config.persistent_storage.use_lvm = false
-  config.persistent_storage.diskdevice = '/dev/sdc'
 
   # Customize provisioner.
   config.vm.provision :chef_solo do |chef|
