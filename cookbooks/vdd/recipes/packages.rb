@@ -17,6 +17,7 @@ package [
   "curl",
   "patchutils",
   "siege",
+  "imagemagick",
 ] do
   action :install
 end
