@@ -1,4 +1,4 @@
-template "/home/ubuntu/.gitconfig" do
+template "/home/vagrant/.gitconfig" do
   source "gitconfig.erb"
   mode "0644"
 end

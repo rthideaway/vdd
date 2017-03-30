@@ -1,6 +1,6 @@
 group 'www-data' do
   action :modify
-  members 'ubuntu'
+  members 'vagrant'
   append true
 end
 
