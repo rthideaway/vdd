@@ -74,3 +74,12 @@ file '/var/log/drupal.log' do
   owner 'syslog'
   group 'www-data'
 end
+
+template "/etc/rsyslog.d/20-drupal.conf" do
+  source "rsyslog-drupal.conf"
+  mode 0644
+end
+
+service "rsyslog" do
+  action :restart
+end

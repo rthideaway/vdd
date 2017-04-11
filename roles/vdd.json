@@ -31,7 +31,7 @@
       "jdk_version": "7"
     },
     "pimpmylogs": {
-      "version" : "v1.7.12"
+      "version" : "v1.7.13"
     },
     "solr" : {
       "version": "4.10.3",
