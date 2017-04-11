@@ -12,7 +12,7 @@ execute 'set_db_root_password' do
   notifies :restart, "service[mysql]", :delayed
 end
 
-gem_package 'mysql2' do
+chef_gem 'mysql2' do
   action :install
 end
 
