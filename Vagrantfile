@@ -10,6 +10,10 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--memory", config_json["vm"]["memory"]]
+
+    vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
+
+
     config_json["vm"]["synced_folders"].each do |folder|
       config.vm.synced_folder folder["host_path"], folder["guest_path"], type: "nfs"
       # This uses uid and gid of the user that started vagrant.
