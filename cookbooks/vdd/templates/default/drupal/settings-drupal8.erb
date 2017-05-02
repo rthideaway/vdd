@@ -38,7 +38,9 @@ $cookie_domain = '.<%= @shortcode %>.<%= node["vm"]["domain_suffix"] %>';
 
 // File paths...
 $conf['file_temporary_path'] = '/tmp';
-$conf['file_private_path'] = '/mnt/persistant/site-files/<%= @shortcode %>/private';
+// $conf['file_private_path'] = '/mnt/persistant/site-files/<%= @shortcode %>/private';
+$conf['file_private_path'] = '../files_private';
+$config_directories['sync'] = '../config/sync';
 
 // Tell Drupal it's behind a proxy.
 $conf['reverse_proxy'] = TRUE;
