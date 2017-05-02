@@ -20,7 +20,7 @@ end
 #
 default['mariadb']['remove_anonymous_users']            = true
 default['mariadb']['remove_test_database']              = true
-default['mariadb']['forbid_remote_root']                = true
+default['mariadb']['forbid_remote_root']                = false
 default['mariadb']['server_root_password']              = ''
 default['mariadb']['root_my_cnf']                       = false
 default['mariadb']['allow_root_pass_change']            = false
@@ -42,7 +42,7 @@ default['mariadb']['mysqld']['lc_messages']             = 'en_US'
 default['mariadb']['mysqld']['skip_external_locking']   = 'true'
 default['mariadb']['mysqld']['skip_log_bin']            = 'false'
 default['mariadb']['mysqld']['skip_name_resolve']       = 'false'
-default['mariadb']['mysqld']['bind_address']            = '127.0.0.1'
+default['mariadb']['mysqld']['bind_address']            = '0.0.0.0'
 default['mariadb']['mysqld']['max_connections']         = '100'
 default['mariadb']['mysqld']['connect_timeout']         = '5'
 default['mariadb']['mysqld']['wait_timeout']            = '600'
