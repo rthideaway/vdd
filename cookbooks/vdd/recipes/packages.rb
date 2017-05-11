@@ -21,6 +21,7 @@ package [
   # Add my packages
   "mc",
   "tmux",
+  "php7.0-bcmath",
 ] do
   action :install
 end
