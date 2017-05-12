@@ -8,7 +8,8 @@
   "dependencies": {
     "apt": ">= 0.0.0",
     "ssl_certificate": ">= 0.0.0",
-    "database": ">= 0.0.0"
+    "database": ">= 0.0.0",
+    "mariadb": ">= 0.0.0"
   },
   "dependencies.backup": {
     "mysql2_chef_gem": ">= 0.0.0",

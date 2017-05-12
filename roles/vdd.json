@@ -60,7 +60,7 @@
     "recipe[vdd::swap]",
     "recipe[vdd::pre-mysql]",
     "recipe[vdd::packages]",
-    "mariadb",
+    "recipe[vdd::mariadb]",
     "recipe[vdd::dnsmasq]",
     "recipe[vdd::nginx]",
     "recipe[vdd::php]",
