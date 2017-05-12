@@ -1,5 +1,7 @@
 source "https://supermarket.chef.io/"
 
+cookbook 'vdd', path: './cookbooks/vdd'
+
 # cookbook "apache2"
 cookbook "apt"
 # cookbook "aws", "= 2.2.0"

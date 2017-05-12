@@ -1,5 +1,13 @@
 Vagrant.configure("2") do |config|
 
+  unless Vagrant.has_plugin?("vagrant-berkshelf")
+    raise 'vagrant-berkshelf is required to download chef cookbooks. Please install it with "vagrant plugin install vagrant-berkshelf"'
+  end
+
+  # Enable berkshelf
+  config.berkshelf.enabled = true
+  config.berkshelf.berksfile_path = "Berksfile"
+
   # TODO if the config file doesn't exist - make it, or advise it
   config_json = JSON.parse(File.read("config.json"))
   config.vm.box = "bento/ubuntu-16.04"
